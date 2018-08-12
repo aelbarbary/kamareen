@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Kamareen",
+    "description": "Muslim Speed Dating",
+    "icon": "./logo.png",
+    "version": "1.0.0",
+    "slug": "kamareen",
+    "sdkVersion": "27.0.0",
+    "ios": {
+      "bundleIdentifier": "com.abdel.kamareen"
+    },
+    "android": {
+      "package": "com.abdel.kamareen"
+    }
+   }
+}

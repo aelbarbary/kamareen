@@ -1,0 +1,1 @@
+export const FETCHING_EVENTS = 'FETCHING_EVENTS'
