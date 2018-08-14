@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View , StyleSheet, TextInput, Text, TouchableHighlight} from 'react-native'
-import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
+import { View , StyleSheet, TextInput, Text, TouchableHighlight, ScrollView, Image} from 'react-native'
+import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button, List, ListItem } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
 import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
@@ -16,6 +16,16 @@ class Event extends React.Component {
     modalVisible: false,
     logDescription: ''
   };
+
+  static navigationOptions = {
+     drawerLabel: 'Home',
+     drawerIcon: ({ tintColor }) => (
+       <Image
+         source={require('./img/1.jpg')}
+         style={[styles.icon, {tintColor: tintColor}]}
+       />
+     ),
+   };
 
   constructor(props) {
     super(props);
@@ -35,12 +45,37 @@ class Event extends React.Component {
 
   render () {
 
-    const { event } = this.props;
+    const { navigation } = this.props;
+    console.log(navigation);
+    const event = navigation.getParam('event', 'NO-EVENT');
 
+    console.log("event details");
     console.log(event.img);
 
-    return <View>
+    const list = [
+      {
+        name: 'Amy Farha',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+        subtitle: 'Vice President'
+      },
+      {
+        name: 'Chris Jackson',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+      },
+      {
+        name: 'Iabrahim Hassan',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+      },
+      {
+        name: 'Abdelrahman Elbarbary',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+      },
+    ]
 
+    return <View style={styles.container}>
       <Card
         title='Bothell, WA Muslim Speed Date'
         image={this.getImage(event.img)}>
@@ -60,29 +95,27 @@ class Event extends React.Component {
           </Text>
 
         </Text>
-        <View style={{flex:1, flexDirection:'row'}}>
-          <Button
-            icon={<Icon name='code' color='#ffffff' />}
-            backgroundColor='#94bdaf'
-
-            buttonStyle={styles.actionButton}
-            title='I AM GOING' />
-          <Button
-              icon={<Icon name='code' color='#ffffff' />}
-              backgroundColor='#94bdaf'
-              onPress={ () => {
-                  this.props.navigation.navigate('EventDetails', {
-                      event: event
-                    })
-                }}
-              buttonStyle={styles.actionButton}
-              title='MORE INFO' />
-        </View>
+        <Text>Going</Text>
+        <ScrollView>
+          <List containerStyle={{marginBottom: 20}}>
+            {
+              list.map((l) => (
+                <ListItem
+                  roundAvatar
+                  avatar={{uri:l.avatar_url}}
+                  key={l.name}
+                  title={l.name}
+                />
+              ))
+            }
+          </List>
+        </ScrollView>
       </Card>
-
     </View>
   }
 }
+
+
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -92,9 +125,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex:1,
-    alignItems:'center' ,
-    justifyContent:'center',
-    width:width
+    alignItems: 'center'
   },
   buttonContainer: {
     flex: 1,

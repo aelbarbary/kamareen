@@ -8,19 +8,17 @@ export function fetchEventsFromStore() {
       return false;
 
     const ref = FirebaseRef.child(`events`);
-    console.log(ref);
+
     var date = new Date();
     dateKey = formatDate(date);
-    console.log(dateKey);
 
     return ref.on('value', (snapshot) => {
 
       var events = [];
-      console.log(snapshot);
       snapshot.forEach(function(event) {
-        console.log(event);
         eventObject = event.val();
         eventObject.key = event.key;
+        console.log(eventObject);
         var totalTime = 0;
 
         events.push(eventObject);

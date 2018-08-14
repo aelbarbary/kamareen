@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, RefreshControl, Image} from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight} from 'react-native'
 import { Button, Card, ListItem, Icon } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
 import { fetchEventsFromStore } from './actions'
@@ -24,8 +24,8 @@ class Home extends React.Component {
   };
 
   static navigationOptions  = ({navigation}) => ({
-         title: navigation.state.params && navigation.state.params.title,
-         header: null
+         title: "hello"
+
   });
 
   constructor(props) {
@@ -60,14 +60,11 @@ class Home extends React.Component {
     this.setState({modalVisible: visible});
   }
 
-  onRefresh = () => {
-    this.setState({refreshing: true});
-    this.props.getHabits()
-  }
 
   render() {
     const { navigate } = this.props.navigation;
     const { events } = this.props.events;
+    console.log(events);
 
     return (
       <View style={{flex:1}}>
@@ -75,23 +72,47 @@ class Home extends React.Component {
           <View style={styles.header}>
             <View style={styles.headerContent}>
                 <Image style={styles.avatar}
-                  source={Images.image0}/>
+                  source={Images.profile}/>
                 <Text style={styles.userInfo}> {Firebase.auth().currentUser.email} </Text>
             </View>
           </View>
 
           <View style={styles.body}>
-            <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
-             <ScrollView >
+            <View style={{flex:1, flexDirection: 'row', justifyContent:'space-between'}}>
+             <ScrollView>
                  {
                    events.length ? (
-                     events.map((event, i) => {
-                       return <Event key={event.key} event={events} style={{margin:0}} navigation={this.props.navigation}/>
+                     events.map((e, i) => {
+                       console.log(e.name);
+                       return <Event key={i} event={e} style={{flex:1}} navigation={this.props.navigation}></Event>
                      })
                    ) : null
                  }
                </ScrollView>
            </View>
+          </View>
+
+          <View style={styles.footer}>
+
+            <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+              <Icon
+                name='access-time'
+              />
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={() => this.props.navigation.navigate('HabitHistory', {
+                habitKey: habit.key
+                })}>
+              <Icon
+                name='edit'
+              />
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={() => this.deleteHabit(habit.key)}>
+              <Icon
+                name='delete'
+              />
+            </TouchableHighlight>
 
           </View>
       </View>
@@ -101,11 +122,11 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container:{
-
   },
   header:{
-    backgroundColor: "#DCDCDC",
-    paddingTop: 10
+    backgroundColor: "#a3abd2",
+    paddingTop: 10,
+    flex:1
   },
   headerContent:{
     padding:10,
@@ -131,8 +152,8 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   body:{
-    flex:1,
-    backgroundColor: "#778899",
+    flex:7,
+    backgroundColor: "#5f4a81",
     alignItems:'center',
     paddingBottom: 20
   },
@@ -158,7 +179,13 @@ const styles = StyleSheet.create({
     fontSize:18,
     marginTop:20,
     color: "#FFFFFF",
-  }
+  },
+  footer: {
+    flex: 0.7,
+    flexDirection: 'row',
+    marginTop: 0,
+    height: 10
+  },
 });
 
 function mapStateToProps (state) {
