@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight} from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight, Linking} from 'react-native'
 import { Button, Card, ListItem, Icon } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
 import { fetchEventsFromStore } from './actions'
@@ -24,7 +24,8 @@ class Home extends React.Component {
   };
 
   static navigationOptions  = ({navigation}) => ({
-         title: "hello"
+         title: "hello",
+         header: null
 
   });
 
@@ -45,6 +46,12 @@ class Home extends React.Component {
   }
 
   componentDidMount(){
+    Linking.getInitialURL().then((url) => {
+    if (url) {
+      console.log('Initial url is: ' + url);
+    }
+    }).catch(err => console.error('An error occurred', err));
+
     this.props.getEvents()
   }
 
